@@ -1,104 +1,44 @@
 @page
-@model InvoiceApp.Pages_Invoices.IndexModel
-
+@model InvoiceApp.Pages.Invoices.IndexModel
 @{
-    Layout = null;
 }
 
-<!DOCTYPE html>
+<h2>Invoices</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<a class="btn btn-primary" asp-page="/Invoices/Create">Create New Invoice</a>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Number)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].IssueDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].DueDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Service)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].UnitPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].ClientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice[0].Address)
-            </th>
+            <th>ID</th>
+            <th>Invoice Number</th>
+            <th>Status</th>
+            <th>Customer Name</th>
+            <th>Total Price</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Action</th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model.Invoice) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Number)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IssueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Service)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+
+    <tbody class="table-group-divider">
+        @foreach (var invoice in Model.invoiceList)
+        {
+            <tr>
+                <td>@invoice.Id</td>
+                <td>@invoice.Number</td>
+                <td>@invoice.Status</td>
+                <td>@invoice.ClientName</td>
+                <td>@(invoice.UnitPrice* invoice.Quantity) $</td>
+                <td>@invoice.IssueDate</td>
+                <td>@invoice.DueDate</td>
+                <td>
+                    <a asp-page="/Invoices/Edit" asp-route-id="@invoice.Id">Edit</a> |
+                    <a asp-page="/Invoices/Details" asp-route-id="@invoice.Id">Details</a> |
+                    <a asp-page="/Invoices/Delete" asp-route-id="@invoice.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
-</body>
-</html>
