@@ -1,15 +1,14 @@
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceApp.Pages.Invoices
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext context;
+        public List<Invoice> invoiceList = new();
 
-        public List<Invoice> invoiceList { get; set; } = new();
+        private readonly ApplicationDbContext context;
 
         public IndexModel(ApplicationDbContext context)
         {
@@ -19,7 +18,7 @@ namespace InvoiceApp.Pages.Invoices
         public void OnGet()
         {
             invoiceList = context.Invoices
-                .OrderByDescending(i => i.IssueDate)
+                .OrderByDescending(i => i.Id)
                 .ToList();
         }
     }
