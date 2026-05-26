@@ -6,6 +6,8 @@
 <h2 class="text-center mb-3">New Invoice</h2>
 
 <form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
     <div class="row g-2 mb-3">
         <div class="col-lg-6">
             <div class="card h-100">
@@ -94,31 +96,53 @@
     </div>
 
     <div class="card mb-3">
-        <div class="card-header"> : : Services Details </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span> : : Invoice Items </span>
+            <button type="button" class="btn btn-success btn-sm" onclick="addItemRow()">+ Add Row</button>
+        </div>
+
         <div class="card-body">
-            <div class="row g-2">
-                <div class="col-lg-6">
-                    <label class="form-label">Service</label>
-                    <input class="form-control" asp-for="InvoiceDto.Service" />
-                    <span asp-validation-for="InvoiceDto.Service" class="text-danger"></span>
-                </div>
+            <table class="table" id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th style="width: 120px;">Quantity</th>
+                        <th style="width: 160px;">Unit Price</th>
+                        <th style="width: 160px;">Total</th>
+                        <th style="width: 100px;">Action</th>
+                    </tr>
+                </thead>
 
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Quantity</label>
-                    <input class="form-control" asp-for="InvoiceDto.Quantity" id="quantityInput" oninput="updateTotalPrice()" />
-                    <span asp-validation-for="InvoiceDto.Quantity" class="text-danger"></span>
-                </div>
+                <tbody id="itemsBody">
+                    @for (int i = 0; i < Model.InvoiceDto.Items.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input class="form-control service-input" asp-for="InvoiceDto.Items[i].Service" />
+                                <span asp-validation-for="InvoiceDto.Items[i].Service" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input class="form-control quantity-input" asp-for="InvoiceDto.Items[i].Quantity" oninput="updateTotals()" />
+                                <span asp-validation-for="InvoiceDto.Items[i].Quantity" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input class="form-control unit-price-input" asp-for="InvoiceDto.Items[i].UnitPrice" oninput="updateTotals()" />
+                                <span asp-validation-for="InvoiceDto.Items[i].UnitPrice" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input class="form-control line-total-input" readonly />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeItemRow(this)">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Unit Price</label>
-                    <input class="form-control" asp-for="InvoiceDto.UnitPrice" id="unitPriceInput" oninput="updateTotalPrice()" />
-                    <span asp-validation-for="InvoiceDto.UnitPrice" class="text-danger"></span>
-                </div>
-
-                <div class="col-lg-2 col-sm-4">
-                    <label class="form-label">Total Price</label>
-                    <input class="form-control" readonly id="totalPriceInput" />
-                </div>
+            <div class="text-end">
+                <strong>Grand Total:</strong>
+                <input class="form-control d-inline-block ms-2" style="width: 180px;" readonly id="grandTotalInput" />
             </div>
         </div>
     </div>
@@ -128,13 +152,73 @@
 </form>
 
 <script>
-    function updateTotalPrice() {
-        let quantity = parseFloat(document.getElementById("quantityInput").value) || 0;
-        let unitPrice = parseFloat(document.getElementById("unitPriceInput").value) || 0;
+    function updateIndexes() {
+        let rows = document.querySelectorAll("#itemsBody tr");
 
-        let totalPrice = quantity * unitPrice;
-        document.getElementById("totalPriceInput").value = totalPrice;
+        rows.forEach((row, index) => {
+            row.querySelector(".service-input").setAttribute("name", `InvoiceDto.Items[${index}].Service`);
+            row.querySelector(".quantity-input").setAttribute("name", `InvoiceDto.Items[${index}].Quantity`);
+            row.querySelector(".unit-price-input").setAttribute("name", `InvoiceDto.Items[${index}].UnitPrice`);
+        });
     }
 
-    updateTotalPrice();
+    function updateTotals() {
+        let rows = document.querySelectorAll("#itemsBody tr");
+        let grandTotal = 0;
+
+        rows.forEach(row => {
+            let quantity = parseFloat(row.querySelector(".quantity-input").value) || 0;
+            let unitPrice = parseFloat(row.querySelector(".unit-price-input").value) || 0;
+            let lineTotal = quantity * unitPrice;
+
+            row.querySelector(".line-total-input").value = lineTotal;
+            grandTotal += lineTotal;
+        });
+
+        document.getElementById("grandTotalInput").value = grandTotal;
+    }
+
+    function addItemRow() {
+        let tbody = document.getElementById("itemsBody");
+
+        let row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>
+                <input class="form-control service-input" />
+            </td>
+            <td>
+                <input class="form-control quantity-input" value="1" oninput="updateTotals()" />
+            </td>
+            <td>
+                <input class="form-control unit-price-input" value="0" oninput="updateTotals()" />
+            </td>
+            <td>
+                <input class="form-control line-total-input" readonly />
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeItemRow(this)">Remove</button>
+            </td>
+        `;
+
+        tbody.appendChild(row);
+        updateIndexes();
+        updateTotals();
+    }
+
+    function removeItemRow(button) {
+        let rows = document.querySelectorAll("#itemsBody tr");
+
+        if (rows.length <= 1) {
+            alert("At least one invoice item is required.");
+            return;
+        }
+
+        button.closest("tr").remove();
+        updateIndexes();
+        updateTotals();
+    }
+
+    updateIndexes();
+    updateTotals();
 </script>

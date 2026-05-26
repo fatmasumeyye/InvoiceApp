@@ -14,14 +14,11 @@ namespace InvoiceApp.Models
 
         public DateOnly? DueDate { get; set; }
 
-        // Servis ayrıntıları
-        [Required]
+        // Eski tek satırlı yapı için bırakıyoruz ama artık zorunlu değil
         public string? Service { get; set; } = "";
 
-        [Range(1, 999999, ErrorMessage = "Unit price is not valid")]
         public decimal UnitPrice { get; set; }
 
-        [Range(1, 99, ErrorMessage = "Quantity is not valid")]
         public int Quantity { get; set; }
 
         // İstemci ayrıntıları
@@ -35,5 +32,10 @@ namespace InvoiceApp.Models
         public string Phone { get; set; } = "";
 
         public string? Address { get; set; } = "";
+
+        public List<InvoiceItemDto> Items { get; set; } = new()
+        {
+            new InvoiceItemDto()
+        };
     }
 }
