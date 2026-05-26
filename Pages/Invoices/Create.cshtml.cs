@@ -23,7 +23,10 @@ namespace InvoiceApp.Pages.Invoices
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             Invoice invoice = new()
             {
