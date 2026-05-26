@@ -1,77 +1,80 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace InvoiceApp.Pages.Invoices
 {
     public class EditModel : PageModel
     {
-        private readonly InvoiceApp.Services.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EditModel(InvoiceApp.Services.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Invoice Invoice { get; set; } = default!;
+        public int Id { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public InvoiceDto InvoiceDto { get; set; } = new();
+
+        public IActionResult OnGet(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var invoice = _context.Invoices.Find(id);
 
-            var invoice =  await _context.Invoices.FirstOrDefaultAsync(m => m.Id == id);
             if (invoice == null)
             {
-                return NotFound();
+                return RedirectToPage("/Invoices/Index");
             }
-            Invoice = invoice;
+
+            Id = invoice.Id;
+
+            InvoiceDto.Number = invoice.Number;
+            InvoiceDto.Status = invoice.Status;
+            InvoiceDto.IssueDate = invoice.IssueDate;
+            InvoiceDto.DueDate = invoice.DueDate;
+            InvoiceDto.Service = invoice.Service;
+            InvoiceDto.UnitPrice = invoice.UnitPrice;
+            InvoiceDto.Quantity = invoice.Quantity;
+            InvoiceDto.ClientName = invoice.ClientName;
+            InvoiceDto.Email = invoice.Email;
+            InvoiceDto.Phone = invoice.Phone;
+            InvoiceDto.Address = invoice.Address;
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Invoice).State = EntityState.Modified;
+            var invoice = _context.Invoices.Find(Id);
 
-            try
+            if (invoice == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InvoiceExists(Invoice.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("/Invoices/Index");
             }
 
-            return RedirectToPage("./Index");
-        }
+            invoice.Number = InvoiceDto.Number;
+            invoice.Status = InvoiceDto.Status;
+            invoice.IssueDate = InvoiceDto.IssueDate;
+            invoice.DueDate = InvoiceDto.DueDate;
+            invoice.Service = InvoiceDto.Service;
+            invoice.UnitPrice = InvoiceDto.UnitPrice;
+            invoice.Quantity = InvoiceDto.Quantity;
+            invoice.ClientName = InvoiceDto.ClientName;
+            invoice.Email = InvoiceDto.Email;
+            invoice.Phone = InvoiceDto.Phone;
+            invoice.Address = InvoiceDto.Address;
 
-        private bool InvoiceExists(int id)
-        {
-            return _context.Invoices.Any(e => e.Id == id);
+            _context.SaveChanges();
+
+            return RedirectToPage("/Invoices/Index");
         }
     }
 }

@@ -14,25 +14,36 @@ namespace InvoiceApp.Pages.Invoices
             _context = context;
         }
 
-        public IActionResult OnGet()
+        [BindProperty]
+        public InvoiceDto InvoiceDto { get; set; } = new();
+
+        public void OnGet()
         {
-            return Page();
         }
 
-        [BindProperty]
-        public Invoice Invoice { get; set; } = default!;
-
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return Page();
+
+            Invoice invoice = new()
             {
-                return Page();
-            }
+                Number = InvoiceDto.Number,
+                Status = InvoiceDto.Status,
+                IssueDate = InvoiceDto.IssueDate,
+                DueDate = InvoiceDto.DueDate,
+                Service = InvoiceDto.Service,
+                UnitPrice = InvoiceDto.UnitPrice,
+                Quantity = InvoiceDto.Quantity,
+                ClientName = InvoiceDto.ClientName,
+                Email = InvoiceDto.Email,
+                Phone = InvoiceDto.Phone,
+                Address = InvoiceDto.Address
+            };
 
-            _context.Invoices.Add(Invoice);
-            await _context.SaveChangesAsync();
+            _context.Invoices.Add(invoice);
+            _context.SaveChanges();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Invoices/Index");
         }
     }
 }
