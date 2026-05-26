@@ -18,9 +18,24 @@ namespace InvoiceApp.Pages.Invoices
         public int Id { get; set; }
 
         [BindProperty]
+        public string Mode { get; set; } = "edit";
+
+        [BindProperty]
         public InvoiceDto InvoiceDto { get; set; } = new();
 
-        public IActionResult OnGet(int id)
+        public bool IsReadOnly => Mode == "details" || Mode == "delete";
+
+        public string PageTitle
+        {
+            get
+            {
+                if (Mode == "details") return "Invoice Details";
+                if (Mode == "delete") return "Delete Invoice";
+                return "Edit Invoice";
+            }
+        }
+
+        public IActionResult OnGet(int id, string mode = "edit")
         {
             var invoice = _context.Invoices.Find(id);
 
@@ -29,7 +44,13 @@ namespace InvoiceApp.Pages.Invoices
                 return RedirectToPage("/Invoices/Index");
             }
 
+            if (mode != "edit" && mode != "details" && mode != "delete")
+            {
+                mode = "edit";
+            }
+
             Id = invoice.Id;
+            Mode = mode;
 
             InvoiceDto.Number = invoice.Number;
             InvoiceDto.Status = invoice.Status;
@@ -48,16 +69,30 @@ namespace InvoiceApp.Pages.Invoices
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             var invoice = _context.Invoices.Find(Id);
 
             if (invoice == null)
             {
                 return RedirectToPage("/Invoices/Index");
+            }
+
+            if (Mode == "delete")
+            {
+                _context.Invoices.Remove(invoice);
+                _context.SaveChanges();
+
+                return RedirectToPage("/Invoices/Index");
+            }
+
+            if (Mode == "details")
+            {
+                return RedirectToPage("/Invoices/Index");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                Mode = "edit";
+                return Page();
             }
 
             invoice.Number = InvoiceDto.Number;

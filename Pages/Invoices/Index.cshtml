@@ -71,9 +71,9 @@
                 <td>@invoice.DueDate</td>
 
                 <td style="white-space:nowrap">
-                    <a class="btn btn-primary btn-sm" asp-page="/Invoices/Edit" asp-route-id="@invoice.Id">Edit</a>
-                    <a class="btn btn-info btn-sm" asp-page="/Invoices/Details" asp-route-id="@invoice.Id">Details</a>
-                    <a class="btn btn-danger btn-sm" asp-page="/Invoices/Delete" asp-route-id="@invoice.Id">Delete</a>
+                    <a class="btn btn-primary btn-sm" asp-page="/Invoices/Edit" asp-route-id="@invoice.Id" asp-route-mode="edit">Edit</a>
+                    <a class="btn btn-info btn-sm" asp-page="/Invoices/Edit" asp-route-id="@invoice.Id" asp-route-mode="details">Details</a>
+                    <a class="btn btn-danger btn-sm" asp-page="/Invoices/Edit" asp-route-id="@invoice.Id" asp-route-mode="delete">Delete</a>
                 </td>
             </tr>
         }
