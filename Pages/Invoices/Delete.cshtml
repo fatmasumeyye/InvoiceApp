@@ -2,3 +2,124 @@
 @model InvoiceApp.Pages.Invoices.DeleteModel
 @{
 }
+
+<h2 class="text-center mb-3">Delete Invoice</h2>
+
+<div class="alert alert-warning">
+    <strong>Warning!</strong> Are you sure you want to delete this invoice?
+</div>
+
+<div class="row g-2 mb-3">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header"> : : Invoice Details </div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Invoice Number</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.Number" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Status</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.Status" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Issue Date</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.IssueDate" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Due Date</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.DueDate" class="form-control" readonly />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header"> : : Client Details </div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Client Name</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.ClientName" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Email</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.Email" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Phone</label>
+                    <div class="col-sm-8">
+                        <input value="@Model.Invoice.Phone" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Address</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" readonly>@Model.Invoice.Address</textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"> : : Services Details </div>
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-lg-6">
+                <label class="form-label">Service</label>
+                <input class="form-control" value="@Model.Invoice.Service" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Quantity</label>
+                <input class="form-control" value="@Model.Invoice.Quantity" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Unit Price</label>
+                <input class="form-control" value="@Model.Invoice.UnitPrice" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Total Price</label>
+                <input class="form-control" value="@(Model.Invoice.UnitPrice* Model.Invoice.Quantity)" readonly />
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" name="id" value="@Model.Invoice.Id" />
+
+    <button type="submit" class="btn btn-danger me-2">
+        Delete
+    </button>
+
+    <a class="btn btn-outline-primary" asp-page="/Invoices/Index">
+        Cancel
+    </a>
+</form>
