@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace InvoiceApp.Pages_Invoices
+namespace InvoiceApp.Pages.Invoices
 {
     public class CreateModel : PageModel
     {
-        private readonly InvoiceApp.Services.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CreateModel(InvoiceApp.Services.ApplicationDbContext context)
+        public CreateModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -27,7 +22,6 @@ namespace InvoiceApp.Pages_Invoices
         [BindProperty]
         public Invoice Invoice { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

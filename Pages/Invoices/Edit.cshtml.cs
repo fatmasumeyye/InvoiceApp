@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using InvoiceApp.Models;
 using InvoiceApp.Services;
 
-namespace InvoiceApp.Pages_Invoices
+namespace InvoiceApp.Pages.Invoices
 {
     public class EditModel : PageModel
     {

@@ -1,94 +1,112 @@
 @page
-@model InvoiceApp.Pages_Invoices.DetailsModel
-
+@model InvoiceApp.Pages.Invoices.DetailsModel
 @{
-    Layout = null;
 }
 
-<!DOCTYPE html>
+<h2 class="text-center mb-3">Invoice Details</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+<div class="row g-2 mb-3">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header"> : : Invoice Details </div>
+            <div class="card-body">
 
-<div>
-    <h4>Invoice</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Number)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Number)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.IssueDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.IssueDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.DueDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.DueDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Service)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Service)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.UnitPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.UnitPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Quantity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Quantity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.ClientName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.ClientName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Phone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.Address)
-        </dd>
-    </dl>
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Invoice Number</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.Number" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Status</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.Status" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Issue Date</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.IssueDate" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Due Date</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.DueDate" readonly />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header"> : : Client Details </div>
+            <div class="card-body">
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Client Name</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.ClientName" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Email</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.Email" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Phone</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" value="@Model.Invoice.Phone" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Address</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" readonly>@Model.Invoice.Address</textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Invoice.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+
+<div class="card mb-3">
+    <div class="card-header"> : : Services Details </div>
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-lg-6">
+                <label class="form-label">Service</label>
+                <input class="form-control" value="@Model.Invoice.Service" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Quantity</label>
+                <input class="form-control" value="@Model.Invoice.Quantity" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Unit Price</label>
+                <input class="form-control" value="@Model.Invoice.UnitPrice" readonly />
+            </div>
+
+            <div class="col-lg-2 col-sm-4">
+                <label class="form-label">Total Price</label>
+                <input class="form-control" value="@(Model.Invoice.UnitPrice* Model.Invoice.Quantity)" readonly />
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+<a class="btn btn-primary" asp-page="/Invoices/Edit" asp-route-id="@Model.Invoice.Id">Edit</a>
+<a class="btn btn-outline-primary" asp-page="/Invoices/Index">Back</a>
